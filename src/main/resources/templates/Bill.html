@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>账单</title>
+    <script src = "/static/js/jquery-3.3.1.min.js"></script>
+    <script src = "/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <style type="text/css">
+        body{
+            background-color: #ededed;
+        }
+        .navbar-nav{
+            float: right;
+        }
+
+        .content{
+            margin-top: 100px;
+
+        }
+        .title{
+            margin-bottom: 20px;
+        }
+        .Bill{
+            height:300px;
+        }
+        </style>
+</head>
+<body>
+    <div class = "nav navbar-inverse navbar-fixed-top">
+    <div class = "container-fluid">
+        <div class ="navbar-header">
+            <div class = "navbar-brand">
+                <a href="#">Hello</a>
+            </div>
+        </div>
+        <ul class = "nav navbar-nav">
+            <li><a href="#">退出</a></li>
+            <li><a href="#">财务</a></li>
+            <li><a href="#">购物车</a></li>
+        </ul>
+    </div>
+</div>
+
+    <div class = "container content">
+        <div class ="row">
+            <div class = "col-md-12 title">
+                <h1 class="text-left text-info">我已购买的商品</h1>
+            </div>
+            <div class = "col-md-12">
+                <div class ="Bill">
+                    <table class = "table table-striped">
+                        <tr class = "text-center">
+                            <th>商品图片</th>
+                            <th>商品名称</th>
+                            <th>购买时间</th>
+                            <th>商品价格</th>
+                            <th>购买数量</th>
+                        </tr>
+                        <tr>
+                            <th><img style="width:60px;height:60px" src = "/static/img/test.jpg"></th>
+                            <th>商品名称</th>
+                            <th>购买时间</th>
+                            <th>商品价格</th>
+                            <th>3</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+    $.get("/Bill",function (data) {
+        for(var index = 0 ; index < data.length;index++){
+            $(".table").append(
+                "<tr>"+
+                "<th><img src="+data[index]['url']+"></th>"+
+                "<th>"+data[index]['title']+"</th>"+
+                "<th>"+data[index]['date']+"</th>"+
+                "<th>"+data[index]['price']+"</th>"+
+                "<th>"+data[index]['number']+"</th>"+
+                "</tr>"
+            )
+        }
+    })
+</script>
+</html>

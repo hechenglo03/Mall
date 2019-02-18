@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src = "/static/js/jquery-3.3.1.min.js"></script>
+    <script src = "/static/js/bootstrap.min.js"></script>
+    <script src = "/static/js/jquery-confirm.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/product.css">
+    <style type="text/css">
+        body{
+            background-color: #ededed;
+        }
+        .content{
+            margin-top: 100px;
+        }
+        .full{
+            margin-top: 20px;
+        }
+        .title{
+            font-size: 30px;
+            color: #000;
+            line-height: 1;
+        }
+        .summary{
+            font-size: 14px;
+            line-height: 25px;
+            padding-top: 20px;
+            color: #999999;
+        }
+        .price{
+            font-size: 20px;
+            font-weight: 500;
+            color: #d44d44;
+            line-height: 40px;
+        }
+        .navbar-nav{
+            float: right;
+        }
+
+        .spinner{
+            width:100px;
+        }
+        .buy{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class = "nav navbar-inverse navbar-fixed-top">
+    <div class = "container-fluid">
+        <div class ="navbar-header">
+            <div class = "navbar-brand">
+                <a href="#">Hello</a>
+            </div>
+        </div>
+        <ul class = "nav navbar-nav">
+            <li><a href="#">退出</a></li>
+            <li><a href="#">财务</a></li>
+            <li><a href="#">购物车</a></li>
+        </ul>
+    </div>
+</div>
+
+    <div class = "container content">
+        <div class = "col-md-5">
+            <img id = "imgurl" src = "http://inews.gtimg.com/newsapp_bt/0/7658629304/1000" style="width: 100%;height:100%">
+        </div>
+        <div class = "col-md-7">
+            <p class = "title"></p>
+            <p class ="summary"></p>
+            <p class ="price">1111</p>
+            <div class="input-group spinner">
+                <input type="text" class="form-control" value="1">
+                <div class="input-group-btn-vertical">
+                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+                </div>
+            </div>
+            <button class = "btn btn-primary btn-md buy">购买</button>
+        </div>
+        <div class = "col-md-12 full">
+            <h1 style="color:#8470FF">全文</h1>
+            <p class = "main" style="color: #1b6d85"></p>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+
+    var id;
+    $.get("/product/content",function (data) {
+        // alert(data.code);
+        if(data.code == 1){
+            console.log(data['object']['title']);
+            $(".title").html(data['object']['title']);
+            $(".summary:eq(0)").html(data['object']['summary']);
+            $(".price:eq(0)").html(data['object']['price']);
+            $(".main:eq(0)").html(data['object']['content']);
+            $("#imgurl").attr("src",data['object']['pic']);
+            id = data['object']['id'];
+        }
+    })
+
+    $('.spinner .btn:first-of-type').on('click', function() {
+        $('.spinner input').val( parseInt($('.spinner input').val(), 10) + 1);
+    });
+    $('.spinner .btn:last-of-type').on('click', function() {
+        $('.spinner input').val( parseInt($('.spinner input').val(), 10) - 1);
+    });
+
+
+    //购买按钮
+    $("#buy").onclick(function () {
+        var sum =$('input').val();
+        $.get("/balance/add",{
+            id:id,
+            sum:sum
+        },function (data) {
+            if(data.code == 1){
+                $.confirm({
+                    title:"购物车",
+                    content:"成功加入购物车",
+                    buttons:{
+                        确定:function () {
+                            $('.spinner input').val(0);//数量设置为0
+                        }
+                    }
+                })
+            }
+        });
+
+    })
+</script>
+</html>

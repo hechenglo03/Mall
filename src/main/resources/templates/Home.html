@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <script src = "/static/js/jquery-3.3.1.min.js"></script>
+    <script src = "/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <style type="text/css">
+        body{
+            background-color: #ededed;
+        }
+        .navbar-nav{
+            float: right;
+        }
+
+        .content{
+            margin-top: 80px;
+
+        }
+        .width{
+            padding: 10px 0px;
+            border:1px solid #efefef;
+            border-radius: 5px;
+            width:85%;
+            background-color: #ffffff;
+            margin: 15px 0px;
+            position: relative;
+        }
+
+
+        .title{
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .price{
+            color: #d44d44;
+            font-weight: 700;
+            margin-top: 10px;
+            text-align: center
+        }
+
+        .icon{
+            position: absolute;
+            bottom:0px;
+            left:0px;
+        }
+        .icon i{
+            color: blue;
+        }
+        .icon span{
+            font-weight: 700;
+            color: #333;
+        }
+
+        .adio{
+            visibility:hidden;
+        }
+
+        a:hover{
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class = "nav navbar-inverse navbar-fixed-top">
+        <div class = "container-fluid">
+            <div class ="navbar-header">
+                <div class = "navbar-brand nickname">
+                </div>
+            </div>
+            <ul class = "nav navbar-nav status">
+            </ul>
+        </div>
+    </div>
+
+
+    <div class = "container content">
+        <div class = "row">
+            <div class = "col-md-6 text-left selected adio" >
+                <div class = "radio-inline">
+                    <input type="radio" name = "product" value="0" checked>全部商品
+                </div>
+                <div class = "radio-inline">
+                    <input type="radio" name="product" value = "1">未购买
+                </div>
+            </div>
+            <div class = "col-md-3 text-right col-md-offset-3 text-center" >
+                <button class = "btn btn-primary up" disabled>上一页</button>
+                <button class = "btn btn-primary down">下一页</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script src = "/static/js/home.js"></script>
+</html>
+
+
+

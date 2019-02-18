@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <script src = "/static/js/jquery-3.3.1.min.js"></script>
+    <script src = "/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <style type="text/css">
+        body{
+            background-color: #ededed;
+        }
+        .navbar-nav{
+            float: right;
+        }
+
+        .content{
+            margin-top: 100px;
+        }
+        .Car{
+            height:200px;
+        }
+    </style>
+</head>
+<body>
+    <div class = "nav navbar-inverse navbar-fixed-top">
+    <div class = "container-fluid">
+        <div class ="navbar-header">
+            <div class = "navbar-brand">
+                <a href="#">Hello</a>
+            </div>
+        </div>
+        <ul class = "nav navbar-nav">
+            <li><a href="#">退出</a></li>
+            <li><a href="#">财务</a></li>
+            <li><a href="#">购物车</a></li>
+        </ul>
+    </div>
+</div>
+
+    <div class = "container content">
+        <div class = "row">
+            <div class = "col-md-12 Car">
+                <table class="table">
+                    <tr class = "bg-info">
+                        <th>标题</th>
+                        <th>价格</th>
+                        <th>数量</th>
+                    </tr>
+                    <tr class = "active">
+                        <th>标题</th>
+                        <th>价格</th>
+                        <th>数量</th>
+                    </tr>
+                    <tr class = "active">
+                        <th>标题</th>
+                        <th>价格</th>
+                        <th>数量</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class = "col-md-1 col-md-offset-4">
+            <div class = "btn btn-primary buy">购买</div>
+        </div>
+        <div class ="col-md-1">
+            <div class = "btn btn-primary col-md-offset-1 cancel">取消</div>
+        </div>
+
+    </div>
+</body>
+<script type="text/javascript">
+    $.get("/Car",function (data) {
+       for(var index = 0 ; index < data.length;index++){
+           $(".table").append(
+               "<tr class = 'active'>" +
+               "<th>"+data[index]['title']+"</th>"+
+               "<th>"+data[index]['price']+"</th>"+
+               "<th>"+data[index]['number']+"</th>"+
+               "</tr>"
+           )
+       }
+    })
+
+    $(".buy").click(function () {
+
+    })
+
+    $(".cancel").click(function () {
+        
+    })
+</script>
+</html>
