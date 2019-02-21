@@ -7,10 +7,8 @@ import com.hcl.Mall.service.*;
 import com.hcl.Mall.utls.JsonResult;
 import com.hcl.Mall.utls.MallConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,12 +57,19 @@ public class Commodity {
 
     }
 
+    /**
+     * 返回单个商品的主页信息
+     * @param session
+     * @return 1 表示商品已购买，0 表示未购买
+     */
     @GetMapping("/content")
     @ResponseBody
     public JsonResult getProduct(HttpSession session){
         long id = (long)session.getAttribute(MallConfig.PRODUCT_SESSION_KEY);
         Product product = this.productRepositoryService.getProductById(id);
-        return new JsonResult(1,"成功获取商品信息",product);
+        if(product.getSold() >=0)
+            return new JsonResult(1,"成功获取商品信息",product);
+        return new JsonResult(0,"商品已购买",product);
     }
 
     /**
@@ -74,7 +79,13 @@ public class Commodity {
     @GetMapping("/editor")
     public String editor(@RequestParam("id") long id,HttpSession session){
         session.setAttribute(MallConfig.PRODUCT_SESSION_KEY,id);
-        return "publish";
+        return "Publish";
     }
 
+    @GetMapping("/delete")
+    @ResponseBody
+    public JsonResult deleteproduct(@RequestParam("id") long id){
+//        this.productRepositoryService.delete(id);
+        return new JsonResult(1,"成功删除该商品",null);
+    }
 }

@@ -1,7 +1,12 @@
 package com.hcl.Mall.controller;
 
+import com.hcl.Mall.dao.Product;
+import com.hcl.Mall.repository.ProductRepository;
+import com.hcl.Mall.service.ProductRepositoryService;
+import com.hcl.Mall.service.TestDaoRepositoryService;
 import com.hcl.Mall.utls.JsonResult;
 import com.hcl.Mall.dao.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +22,21 @@ import java.net.URL;
 @RequestMapping("/test")
 public class Test {
 
+    @Autowired
+    private TestDaoRepositoryService testDaoRepositoryService;
+
+    @Autowired
+    private ProductRepository productRepository;
+
     @RequestMapping("")
-    public String test(){
-        return "publish";
+      public String test(){
+        return "test";
     }
 
     @RequestMapping("/attack")
     @ResponseBody
-    public String dir(HttpServletRequest request){
+    public Product dir(HttpServletRequest request){
+        return this.productRepository.getById(1);
 
-        System.out.println(request.getServletPath());
-        return "OK";
     }
 }

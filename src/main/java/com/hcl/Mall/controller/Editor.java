@@ -39,14 +39,6 @@ public class Editor {
     }
 
 
-    @GetMapping("/delete")
-    @ResponseBody
-    public JsonResult deleteProduct(@RequestParam("id") long id){
-        if(this.productRepositoryService.delete(id))
-            return new JsonResult(1,"成功删除",null);
-        return new JsonResult(0,"删除失败",null);
-    }
-
     @GetMapping("")
     public String editor(){
         return "Editor";

@@ -1,5 +1,8 @@
 var product;
 
+Title();//获取头部信息
+
+
 
 $.get("/product/index",function (data) {
     if(data['code'] == 0){

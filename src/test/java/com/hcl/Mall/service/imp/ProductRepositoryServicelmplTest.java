@@ -1,5 +1,8 @@
 package com.hcl.Mall.service.imp;
 
+import com.hcl.Mall.controller.TestDao;
+import com.hcl.Mall.dao.Product;
+import com.hcl.Mall.dao.Seller;
 import com.hcl.Mall.query.ProductMessage;
 import com.hcl.Mall.service.ProductRepositoryService;
 import com.hcl.Mall.service.*;
@@ -30,6 +33,12 @@ public class ProductRepositoryServicelmplTest {
     @Autowired
     private UserRepositoryService userRepositoryService;
 
+    @Autowired
+    private TestDaoRepositoryService testDaoRepositoryService;
+
+    @Autowired
+    private SellerRepositoryService sellerRepositoryService;
+
     @Test
     public void ProductTest() throws URISyntaxException {
         URL url = FileUtil.class.getResource("/static/img");
@@ -38,4 +47,20 @@ public class ProductRepositoryServicelmplTest {
 
     }
 
+
+    @Test
+    public void Test(){
+        ProductRepositoryService productRepositoryService = new ProductRepositoryServicelmpl();
+        Product product = new Product();
+        product.setContent("one");
+        product.setSummary("one");
+        product.setId(1);
+        productRepositoryService.save(product);
+    }
+
+    @Test
+    public void Test1(){
+        Seller seller = this.sellerRepositoryService.getSeller("hechenglo03","e10adc3949ba59abbe56e057f20f883e");
+        System.out.println(seller);
+    }
 }

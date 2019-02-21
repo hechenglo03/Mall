@@ -23,11 +23,5 @@ public class User {
     //昵称
     private String nickname;
 
-    @OneToMany
-    private List<Product> list;
-
-
-
-
 
 }

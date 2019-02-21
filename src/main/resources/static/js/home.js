@@ -1,35 +1,14 @@
 
-var usertype = "";
+Title();//状态栏的抓取
 
-
-//顶栏信息抓取
-$.get("/home/title",function (data) {
-    //没有登录者
-    if(data['code'] == 0){
-        $(".nickname").append("<a href='/login'>登录</a>");
-        $(".status").append("<li><a href='/home'>首页</a></li>")
-        usertype = "visitor"//全局设置用户类型为游客
-    }else if(data['code'] == 1){//买家登录
-        $(".nickname").append("<span>"+data['object']['nickname']+"，你好</span>");
-        $(".status").append("<li><a href=\"/user/loginout\">"+data["object"]["out"]+"</a></li>\n" +
-            "                <li><a href=\"#\">"+data["object"]["fin"]+"</a></li>\n" +
-            "                <li><a href=\"#\">"+data["object"]["car"]+"</a></li>");
-        usertype = "user";//定义全局变量设置为买家
-    }else{//卖者登录
-        $(".nickname").append("<a href='#'>"+data['object']['nickname']+"</a>")
-        $(".status").append("<li><a href=\"/seller/loginout\">"+data['object']['out']+"</a></li>\n" +
-            "                <li><a href=\"#\">"+data['object']['publish']+"</a></li>")
-        usertype = "seller";
-        $(".selected").removeClass("adio")//若为卖者，关闭复选框
-    }
-
-    GetProduct(usertype,0,0);//刚刚开始启动获取数据
-});
+GetProduct(usertype,0,0);//商品信息第一页抓取
 
 var allindex = 0;//全部商品索引
 var notindex = 0;//未购买的商品索引
 var flag = true;//表示全部商品
 var Bought =  "<div class = \"icon\"><i class = \"fa  fa-2x fa-bell-o\"></i><span>已购买</span></div> ";
+var Sold =  "<div class = \"icon\"><i class = \"fa  fa-2x fa-buysellads\"></i><span>售出";
+var Delete = "<button class = 'btn btn-primary btn-sm delete' data-id =";
 
 function GetProduct(usertype,bought,index) {
     $.get("/product/type/"+usertype,{"index":index,bought:bought},function (data) {
@@ -39,7 +18,7 @@ function GetProduct(usertype,bought,index) {
 
         var imglist = data['object'];
         for(var index = 0 ; index < imglist.length;index++){
-            var before = "<div class = \"col-md-3 text-center\">"+
+            var before = "<div class = \"col-md-3 text-center cell\">"+
                 "<a class = \"width\" style='display: block' href='/product/index?id="+imglist[index]['id']+"'>";
             var after = "<img style=\"width:100px;height:150px\" src = "+imglist[index]['pic']+">"+
                 "<p class = \"title\">"+imglist[index]['title']+"</p>"+
@@ -48,8 +27,16 @@ function GetProduct(usertype,bought,index) {
                 "</div>";
             var Sum = before;
             if( usertype == "user" && imglist[index]['sold'] < 0){
-                Sum = Sum + bought;
+                Sum = Sum + Bought;//用户为买者，已购买的商品需要添加上已购买的标志
             }
+
+            if(usertype == "seller" && imglist[index]['sold'] <0){
+                Sum = Sum + Sold+imglist[index]['sold']*-1+"</span></div>";//用户为卖者，已购买的商品需要显示已购买的数量
+            }
+            if(usertype == "seller" && imglist[index]['sold'] >= 0){
+                Sum = Sum + Delete+imglist[index]['id']+ ">删除</button>";//用户为卖者，为没有购买的商品添加删除按钮
+            }
+
             Sum = Sum +after;
             $(".row").append(Sum);
         }
@@ -90,6 +77,7 @@ $(".down").click(function () {
     }
 })
 
+//购买和未购买的复选框
 $(":radio").click(function () {
     //清空全部商品或者未购买商品的索引
     if(flag){
@@ -99,6 +87,20 @@ $(":radio").click(function () {
     }
     flag = !flag;
     var bought = $('input[name="product"]:checked').val();
-    $(".width").remove();
+    $(".cell").remove();//整个图片移除
     GetProduct(usertype,bought,0);
+})
+
+//商品的删除按钮事件,使用deletegate来防止js动态加载注册不上去事件
+$('body').delegate(".delete","click",function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    var id =$(this).attr("data-id");
+    var father = $(e.target);
+    $.get("/product/delete",{id:id},function (data) {
+        if(data.code == 1){
+            console.log(father.parent())
+            father.parent().remove();//删除该未出售的商品
+        }
+    })
 })

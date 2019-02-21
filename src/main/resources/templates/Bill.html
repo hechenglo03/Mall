@@ -5,6 +5,7 @@
     <title>账单</title>
     <script src = "/static/js/jquery-3.3.1.min.js"></script>
     <script src = "/static/js/bootstrap.min.js"></script>
+    <script src = "/static/js/title.js"></script>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/font-awesome.min.css">
     <style type="text/css">
@@ -25,20 +26,20 @@
         .Bill{
             height:300px;
         }
+        img{
+            width:72px;
+            height:41px;
+        }
         </style>
 </head>
 <body>
     <div class = "nav navbar-inverse navbar-fixed-top">
     <div class = "container-fluid">
         <div class ="navbar-header">
-            <div class = "navbar-brand">
-                <a href="#">Hello</a>
+            <div class = "navbar-brand nickname">
             </div>
         </div>
-        <ul class = "nav navbar-nav">
-            <li><a href="#">退出</a></li>
-            <li><a href="#">财务</a></li>
-            <li><a href="#">购物车</a></li>
+        <ul class = "nav navbar-nav status">
         </ul>
     </div>
 </div>
@@ -51,19 +52,12 @@
             <div class = "col-md-12">
                 <div class ="Bill">
                     <table class = "table table-striped">
-                        <tr class = "text-center">
-                            <th>商品图片</th>
-                            <th>商品名称</th>
-                            <th>购买时间</th>
-                            <th>商品价格</th>
-                            <th>购买数量</th>
-                        </tr>
-                        <tr>
-                            <th><img style="width:60px;height:60px" src = "/static/img/test.jpg"></th>
-                            <th>商品名称</th>
-                            <th>购买时间</th>
-                            <th>商品价格</th>
-                            <th>3</th>
+                        <tr >
+                            <th class = "text-center">商品图片</th>
+                            <th class = "text-center">商品名称</th>
+                            <th class = "text-center">购买时间</th>
+                            <th class = "text-center">商品价格</th>
+                            <th class = "text-center">购买数量</th>
                         </tr>
                     </table>
                 </div>
@@ -73,15 +67,28 @@
 
 </body>
 <script type="text/javascript">
-    $.get("/Bill",function (data) {
-        for(var index = 0 ; index < data.length;index++){
+
+    Title()//状态的抓取
+    var index = 0;
+
+    //转化时间戳成时间格式
+    function Totime(timestamp) {
+        var newDate = new Date();
+        newDate.setTime(timestamp);
+        return newDate.toDateString();
+    }
+
+
+    $.get("/balance/products",{index:index},function (data) {
+        var list = data['object'];
+        for(var i = 0 ; i < list.length;i++){
             $(".table").append(
                 "<tr>"+
-                "<th><img src="+data[index]['url']+"></th>"+
-                "<th>"+data[index]['title']+"</th>"+
-                "<th>"+data[index]['date']+"</th>"+
-                "<th>"+data[index]['price']+"</th>"+
-                "<th>"+data[index]['number']+"</th>"+
+                "<th class = 'text-center'><img src="+list[i]['pic']+"></th>"+
+                "<th class = 'text-center'>"+list[i]['title']+"</th>"+
+                "<th class = 'text-center'>"+Totime(list[i]['buytime'])+"</th>"+
+                "<th class = 'text-center'>"+list[i]['price']+"</th>"+
+                "<th class = 'text-center'>"+list[i]['sold']+"</th>"+
                 "</tr>"
             )
         }

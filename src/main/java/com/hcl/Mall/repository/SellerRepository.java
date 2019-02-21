@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SellerRepository extends JpaRepository<Seller,Long> {
 
-    Seller getBySellernameAndSellerpassword(String sellername,String password);
+    Seller getBySellernameAndSellerpassword(String sellername,String sellerpassword);
 }

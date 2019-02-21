@@ -7,7 +7,6 @@ public class AccountProduct {
 
     private long id;
 
-    private String title;
 
-    private int sum;
+    private int sold;
 }

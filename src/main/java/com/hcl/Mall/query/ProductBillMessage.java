@@ -5,13 +5,13 @@ import lombok.Data;
 
 import java.util.Date;
 
+
 /**
- *主页显示商品的信息
- *
+ * 账单显示的商品细节
  */
 @Data
 @AllArgsConstructor
-public class ProductMessage {
+public class ProductBillMessage {
 
     private long id;
 
@@ -23,4 +23,5 @@ public class ProductMessage {
 
     private int sold;
 
+    private Date buytime;
 }

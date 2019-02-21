@@ -4,11 +4,11 @@ package com.hcl.Mall.dao;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @Entity
-@Table(name = "product")
 public class Product {
 
     @Id
@@ -31,11 +31,12 @@ public class Product {
     // <0 表示已购买了，>0表示几件加入购物车
     private int sold;
 
-
     //正文内容
     @Lob
+    @Basic(fetch=FetchType.LAZY)
     private String content;
 
-
+    //购买的时间
+    private Date buytime;
 
 }

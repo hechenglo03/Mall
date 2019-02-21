@@ -5,8 +5,11 @@
     <title>主页</title>
     <script src = "/static/js/jquery-3.3.1.min.js"></script>
     <script src = "/static/js/bootstrap.min.js"></script>
+    <script src = "/static/js/jquery-confirm.min.js"></script>
+    <script src = "/static/js/title.js"></script>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/jquery-confirm.min.css">
     <style type="text/css">
         body{
             background-color: #ededed;
@@ -21,20 +24,19 @@
         .Car{
             height:200px;
         }
+        a:hover{
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
     <div class = "nav navbar-inverse navbar-fixed-top">
     <div class = "container-fluid">
         <div class ="navbar-header">
-            <div class = "navbar-brand">
-                <a href="#">Hello</a>
+            <div class = "navbar-brand nickname">
             </div>
         </div>
-        <ul class = "nav navbar-nav">
-            <li><a href="#">退出</a></li>
-            <li><a href="#">财务</a></li>
-            <li><a href="#">购物车</a></li>
+        <ul class = "nav navbar-nav status">
         </ul>
     </div>
 </div>
@@ -44,51 +46,75 @@
             <div class = "col-md-12 Car">
                 <table class="table">
                     <tr class = "bg-info">
-                        <th>标题</th>
-                        <th>价格</th>
-                        <th>数量</th>
-                    </tr>
-                    <tr class = "active">
-                        <th>标题</th>
-                        <th>价格</th>
-                        <th>数量</th>
-                    </tr>
-                    <tr class = "active">
-                        <th>标题</th>
-                        <th>价格</th>
-                        <th>数量</th>
+                        <th class = "text-center">标题</th>
+                        <th class = "text-center">价格</th>
+                        <th class = "text-center">数量</th>
                     </tr>
                 </table>
             </div>
         </div>
-        <div class = "col-md-1 col-md-offset-4">
-            <div class = "btn btn-primary buy">购买</div>
-        </div>
-        <div class ="col-md-1">
-            <div class = "btn btn-primary col-md-offset-1 cancel">取消</div>
+        <div class = "col-md-12 text-center">
+            <button class = "btn btn-primary buy">购买</button>
+        <!--</div>-->
+        <!--<div class ="col-md-6 text-center">-->
+            <button class = "btn btn-primary cancel">取消</button>
         </div>
 
     </div>
 </body>
 <script type="text/javascript">
-    $.get("/Car",function (data) {
-       for(var index = 0 ; index < data.length;index++){
+
+    Title();//状态栏的抓取
+    var index = 0;
+    var IdList = new Array();//记录商品id的列表
+    $.get("/balance/carlist",{index:index},function (data) {
+        var list = data['object'];
+        if(list.length == 0){
+            $(".buy").attr("disabled",true);//如果没有商品，禁用购买键
+        }
+       for(var index = 0 ; index < list.length;index++){
+           IdList.push({
+               id:list[index]['id'],
+               sold:list[index]['sold']
+           });
            $(".table").append(
                "<tr class = 'active'>" +
-               "<th>"+data[index]['title']+"</th>"+
-               "<th>"+data[index]['price']+"</th>"+
-               "<th>"+data[index]['number']+"</th>"+
+               "<th class = 'text-center'><a href='/product/index/?id ="+list[index]['id']+"'>"+list[index]['title']+"</a></th>"+
+               "<th class = 'text-center'>"+list[index]['price']+"</th>"+
+               "<th class ='text-center'>"+list[index]['sold']+"</th>"+
                "</tr>"
            )
        }
     })
 
     $(".buy").click(function () {
-
+        $.ajax({
+            url:"/balance/account",
+            type:"POST",
+            data:JSON.stringify(IdList),
+            contentType: 'application/json; charset=utf-8',
+            dataType:"json",
+            success:function (data) {
+                if(data.code == 1){
+                    $.alert({
+                        title: '系统提示',
+                        content: "成功购买",
+                        icon: 'fa fa-comment',
+                        type: 'black',
+                        buttons: {
+                            "确定": function() {
+                                $(".active").remove();//去除节点元素
+                                $(".buy").attr("disabled",true);
+                            }
+                        }
+                    });
+                }
+            }
+        })
     })
 
     $(".cancel").click(function () {
-        
+        history.go(-1);//返回上一级
     })
 </script>
 </html>

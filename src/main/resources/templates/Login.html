@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>登录</title>
-    <script src = "/static/js/jquery-3.3.1.min.js"></script>
-    <script src = "/static/js/bootstrap.min.js"></script>
-    <script src = "/static/js/jquery.toast.min.js"></script>
-    <script src = "/static/js/md5.min.js"></script>
+    <title>用户登录</title>
+    <link rel="stylesheet" href="/static/css/jquery.toast.min.css">
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/css/jquery.toast.min.css">
-    <style type="text/css">
+    <style>
         .header{
-            top:80px;
             border: 1px solid #dadada;
             border-radius: 10px;
             padding:30px 50px;
@@ -30,11 +25,11 @@
         .icon-user{
             margin-bottom: 40px;
         }
-         .form-group{
-             margin: 20px 0px;
-             border: 1px solid #ccc;
-             border-radius: 4px;
-         }
+        .form-group{
+            margin: 20px 0px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
         input {
             border:none !important;
             border-radius: 0px !important;
@@ -49,10 +44,31 @@
         .text{
             padding-right: 0px;
         }
+        /*web background*/
+        .container{
+            display:table;
+            height:100%;
+        }
+
+        .row{
+            display: table-cell;
+            vertical-align: middle;
+        }
+        /* centered columns styles */
+        .row-centered {
+            text-align:center;
+        }
+        .col-centered {
+            display:inline-block;
+            float:none;
+            text-align:left;
+            margin-right:-4px;
+        }
     </style>
 </head>
+
 <body>
-    <div class = "nav navbar-inverse navbar-fixed-top">
+<div class = "nav navbar-inverse">
     <div class = "container-fluid">
         <div class ="navbar-header">
             <div class = "navbar-brand">
@@ -64,9 +80,9 @@
         </ul>
     </div>
 </div>
-
-    <div class = "container">
-        <div class = "col-md-4 col-md-offset-4 header">
+<div class="container">
+    <div class="row row-centered">
+        <div class="well col-md-4 col-centered header">
             <div class = "text-center icon-user">
                 <i class ="fa fa-user-circle fa-5x"></i>
             </div>
@@ -102,9 +118,14 @@
             </form>
         </div>
     </div>
-</body>
-<script type="text/javascript">
+</div>
 
+
+<script src="/static/js/jquery.min.js"></script>
+<script src = "/static/js/jquery.toast.min.js"></script>
+<script src = "/static/js/md5.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript">
     function Toast(text,head,fun) {
         $.toast({
             text: text,
@@ -153,4 +174,5 @@
 
     }
 </script>
+</body>
 </html>
