@@ -17,29 +17,30 @@ function GetProduct(usertype,bought,index) {
         }
 
         var imglist = data['object'];
-        for(var index = 0 ; index < imglist.length;index++){
+        for(var i = 0 ; i < imglist.length;i++){
             var before = "<div class = \"col-md-3 text-center cell\">"+
-                "<a class = \"width\" style='display: block' href='/product/index?id="+imglist[index]['id']+"'>";
-            var after = "<img style=\"width:100px;height:150px\" src = "+imglist[index]['pic']+">"+
-                "<p class = \"title\">"+imglist[index]['title']+"</p>"+
-                "<p class = \"price\"><span>¥  </span>"+imglist[index]['price']+"</p>"+
+                "<a class = \"width\" style='display: block' href='/product/index?id="+imglist[i]['id']+"'>";
+            var after = "<img style=\"width:100px;height:150px\" src = "+imglist[i]['pic']+">"+
+                "<p class = \"title\">"+imglist[i]['title']+"</p>"+
+                "<p class = \"price\"><span>¥  </span>"+imglist[i]['price']+"</p>"+
                 "</a>"+
                 "</div>";
             var Sum = before;
-            if( usertype == "user" && imglist[index]['sold'] < 0){
+            if( usertype == "user" && imglist[i]['sold'] < 0){
                 Sum = Sum + Bought;//用户为买者，已购买的商品需要添加上已购买的标志
             }
 
-            if(usertype == "seller" && imglist[index]['sold'] <0){
-                Sum = Sum + Sold+imglist[index]['sold']*-1+"</span></div>";//用户为卖者，已购买的商品需要显示已购买的数量
+            if(usertype == "seller" && imglist[i]['sold'] <0){
+                Sum = Sum + Sold+imglist[i]['sold']*-1+"</span></div>";//用户为卖者，已购买的商品需要显示已购买的数量
             }
-            if(usertype == "seller" && imglist[index]['sold'] >= 0){
-                Sum = Sum + Delete+imglist[index]['id']+ ">删除</button>";//用户为卖者，为没有购买的商品添加删除按钮
+            if(usertype == "seller" && imglist[i]['sold'] >= 0){
+                Sum = Sum + Delete+imglist[i]['id']+ ">删除</button>";//用户为卖者，为没有购买的商品添加删除按钮
             }
 
             Sum = Sum +after;
             $(".row").append(Sum);
         }
+        $(".index").html("第"+(index+1)+"页");
     },"json")
 }
 
@@ -51,13 +52,15 @@ $(".up").click(function () {
     }else{
         index = --notindex;
     }
-    $(".width").remove();//本身带有元素节点
-    GetProduct(usetype,bought,index);
+    var bought = $('input[name="product"]:checked').val();
+    $(".cell").remove();//删除以前的表格
+    GetProduct(usertype,bought,index);
+
     if(index == 0){
-        $(".up").attr("disabled", true);
+        $(".up").attr("disabled","disabled");//索引为0，禁用上翻键
     }
-    if($(".down").attr("disabled") == true){
-        $(".down").attr("disabled",false);
+    if($(".down").attr("disabled") == "disabled"){
+        $(".down").removeAttr("disabled");
     }
 })
 
@@ -70,10 +73,10 @@ $(".down").click(function () {
         index = ++notindex;
     }
     var bought = $('input[name="product"]:checked').val();
-    $(".width").remove();
+    $(".cell").remove();
     GetProduct(usertype,bought,index);
-    if($(".up").attr("disabled") == true){
-        $(".up").attr("disabled",false)
+    if($(".up").attr("disabled") == "disabled"){
+        $(".up").removeAttr("disabled");
     }
 })
 
@@ -97,10 +100,23 @@ $('body').delegate(".delete","click",function (e) {
     e.preventDefault();
     var id =$(this).attr("data-id");
     var father = $(e.target);
-    $.get("/product/delete",{id:id},function (data) {
-        if(data.code == 1){
-            console.log(father.parent())
-            father.parent().remove();//删除该未出售的商品
+    $.confirm({
+        title:"商品删除确定",
+        content:"是否要删除商品",
+        buttons:{
+            "确定":function () {
+                $.get("/product/delete",{id:id},function (data) {
+                    if(data.code == 1){
+                        location.reload();
+                    }
+                })
+            },
+            "没有决定":function () {
+
+            }
         }
+
+
     })
+
 })

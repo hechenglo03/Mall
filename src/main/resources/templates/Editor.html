@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
     <title>发布</title>
     <script src = "/static/js/jquery-3.3.1.min.js"></script>
     <script src = "/static/js/bootstrap.min.js"></script>
@@ -97,7 +100,7 @@
                             <input type="file" name = "file" disabled>
                         </div>
                         <div class = "col-md-2 miss file">
-                            <div class = "btn btn-primary" id = "upload">上传</div>
+                            <div class = "btn btn-primary" id = "upload" name = "btnupload">上传</div>
                         </div>
                     </div>
 
@@ -117,7 +120,7 @@
 
                     <div class = "form-group">
                         <div class = "col-md-2 col-sm-offset-2">
-                            <button type="submit" class = "btn btn-primary" id="action">提交</button>
+                            <button  class = "btn btn-primary" id="action">提交</button>
                         </div>
                         <input type="reset" name="reset" style="display: none;" />
                     </div>
@@ -127,7 +130,7 @@
             </div>
 
             <div class = "col-md-2 pic text-center">
-                <img src(unknown) id = "imgurl">
+                <img  id = "imgurl" onerror="this.style.display='none'">
             </div>
 
         </div>

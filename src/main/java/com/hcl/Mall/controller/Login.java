@@ -1,21 +1,23 @@
 package com.hcl.Mall.controller;
 
+import com.hcl.Mall.dao.Buyer;
 import com.hcl.Mall.dao.Seller;
-import com.hcl.Mall.dao.User;
 import com.hcl.Mall.service.*;
 import com.hcl.Mall.utls.JsonResult;
 import com.hcl.Mall.utls.MallConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+@Slf4j
 @Controller
 public class Login {
 
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private BuyerRepositoryService buyerRepositoryService;
 
     @Autowired
     private SellerRepositoryService sellerRepositoryService;
@@ -37,20 +39,25 @@ public class Login {
                                @PathVariable String usertype,
                                HttpSession httpSession) {
 
-        if (usertype.equals("user")) {
-            User user = this.userRepositoryService.getUser(username, passwd);
-            if (user == null) {
+        if (usertype.equals("buyer")) {
+            Buyer buyer = this.buyerRepositoryService.getBuyer(username, passwd);
+            if (buyer == null) {
+                log.info("买者登录失败");
                 return new JsonResult(0, "密码错误", null);
             } else {
-                httpSession.setAttribute(MallConfig.USER_SESSION_KEY, user);
+                log.info("买者登录成功");
+                httpSession.setAttribute(MallConfig.USER_SESSION_KEY, buyer);
                 return new JsonResult(1, "/home", null);
             }
         } else {
             Seller seller = this.sellerRepositoryService.getSeller(username, passwd);
-            if (seller == null)
+            if (seller == null) {
+                log.info("卖者登录失败");
                 return new JsonResult(0, "密码错误", null);
+            }
             else {
-                httpSession.setAttribute(MallConfig.SELLER_SESSION_KEY, seller);
+                log.info("卖者登录成功");
+                httpSession.setAttribute(MallConfig.USER_SESSION_KEY,seller);
                 return new JsonResult(1, "/home", null);
             }
         }
@@ -60,25 +67,15 @@ public class Login {
     /**
      * 账号退出操作
      *
-     * @param usertype
      * @param session
      * @return
      */
     @GetMapping("/{usertype}/loginout")
-    public String getLoginOut(@PathVariable String usertype, HttpSession session) {
-        if (usertype.equals("user")) {
-            if (session.getAttribute(MallConfig.USER_SESSION_KEY) != null) {
-                session.removeAttribute(MallConfig.USER_SESSION_KEY);
-                return "login";
-            }
-        } else {
-            if (session.getAttribute(MallConfig.SELLER_SESSION_KEY) != null) {
-                session.removeAttribute(MallConfig.SELLER_SESSION_KEY);
-                return "login";
-            }
-
-        }
-        return null;
+    public String getLoginOut(HttpSession session) {
+        if(session.getAttribute(MallConfig.USER_SESSION_KEY) != null)
+            return "login";
+        else
+            return null;
 
     }
 }

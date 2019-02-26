@@ -19,7 +19,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("select new com.hcl.Mall.query.ProductMessage(p.id,p.title,p.price,p.pic,p.sold) from Product p where p.sold >= 0")
     Page<ProductMessage> findSomeProductNotBought(Pageable pageable);
 
-    @Query("select new com.hcl.Mall.query.ProductMessage(p.id,p.title,p.price,p.pic,p.sold,p.buytime) from Product p where p.sold > 0")
+    @Query("select new com.hcl.Mall.query.ProductMessage(p.id,p.title,p.price,p.pic,p.sold) from Product p where p.sold > 0")
     Page<ProductMessage> findCarListProduct(Pageable pageable);
 
     @Query("select new com.hcl.Mall.query.ProductBillMessage(p.id,p.title,p.price,p.pic,-p.sold,p.buytime) from Product p where p.sold < 0")
@@ -38,7 +38,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     @Query("select p.pic from Product p where p.id = ?1")
     String getPicName(long id);
-
 
     
  }

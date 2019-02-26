@@ -11,14 +11,14 @@ function Title() {
             $(".status").append("<li><a href='/home'>首页</a></li>")
             usertype = "visitor"//全局设置用户类型为游客
         } else if (data['code'] == 1) {//买家登录
-            $(".nickname").append("<span>" + data['object']['nickname'] + "，你好</span>");
+            $(".nickname").append("<a href='/home'>" + data['object']['nickname'] + "，你好</a>");
             $(".status").append("<li><a href=\"/user/loginout\">" + data["object"]["out"] + "</a></li>\n" +
                 "                <li><a href=\"/balance/bill\">" + data["object"]["fin"] + "</a></li>\n" +
                 "                <li><a href=\"/balance/car\">" + data["object"]["car"] + "</a></li>");
-            usertype = "user";//定义全局变量设置为买家
+            usertype = "buyer";//定义全局变量设置为买家
             $(".selected").removeClass("adio")//若为买家，关闭复选框
         } else {//卖者登录
-            $(".nickname").append("<a href='#'>" + data['object']['nickname'] + "</a>")
+            $(".nickname").append("<a href='/home'>" + data['object']['nickname'] + "</a>")
             $(".status").append("<li><a href=\"/seller/loginout\">" + data['object']['out'] + "</a></li>\n" +
                 "                <li><a href='/editor'>" + data['object']['publish'] + "</a></li>");
             usertype = "seller";

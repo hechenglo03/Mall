@@ -1,19 +1,20 @@
 package com.hcl.Mall.controller;
 
+import com.hcl.Mall.dao.Buyer;
 import com.hcl.Mall.dao.Seller;
-import com.hcl.Mall.dao.User;
 import com.hcl.Mall.dom.SellerTitle;
-import com.hcl.Mall.dom.UserTitle;
+import com.hcl.Mall.dom.BuyerTitle;
 import com.hcl.Mall.utls.JsonResult;
 import com.hcl.Mall.utls.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
+@Slf4j
 @Controller
 @RequestMapping("/home")
 public class Home {
@@ -39,13 +40,15 @@ public class Home {
     @ResponseBody
     public JsonResult title(HttpSession httpSession){
 
-        Object result = StrUtil.getUserOrSeller(httpSession);
+        Object result = StrUtil.getBuyerOrSeller(httpSession);
 
-        if(result instanceof User){
-            User user = (User) result;
-            UserTitle userTitle =
-                    new UserTitle(user.getNickname(),"退出","财务","购物车");
-            return new JsonResult(1,"用户",userTitle);
+        log.info("登陆者登录"+result);
+
+        if(result instanceof Buyer){
+            Buyer buyer = (Buyer) result;
+            BuyerTitle buyerTitle =
+                    new BuyerTitle(buyer.getNickname(),"退出","财务","购物车");
+            return new JsonResult(1,"买者",buyerTitle);
         }else if (result instanceof Seller){
             Seller seller = (Seller) result;
             SellerTitle sellerTitle =

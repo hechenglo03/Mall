@@ -1,6 +1,4 @@
-
-
-
+var id = null;//shang
 //显示按钮的注册事件
 
 $("#show").click(function () {
@@ -13,13 +11,9 @@ $("#show").click(function () {
 });
 
 
+//表单验证
+$("form").bootstrapValidator({
 
- $("form").bootstrapValidator({
-
-    /* 生效规则
-     * enabled:字段值发生变化就触发验证
-     * disabled/submitted:点击提交时触发验证
-     */
     live: 'disabled',
     //表单域配置
     fields: {
@@ -65,59 +59,77 @@ $("#show").click(function () {
         },
         file:{
             validators:{
-                notEmpty:{message:'请上传文件'}
+                notEmpty:{message:'请上传文件'},
+                callback:{
+                    message:"文件没有上传",
+                    callback:function (value,validator,$field) {
+                        if($("input[type='radio']:checked").val() == "file"){
+                            console.log($("#imgurl").attr("src"));
+                            if($("#imgurl").attr("src") == undefined)
+                                return false;
+                        }
+                        return true;
+                    }
+                }
             }
         }
     }
-}).on('success.form.bv',function (e){
-     e.preventDefault();
-     var title = $('input[name = "title"]').val();
-     var summary = $('input[name = "summary"]').val();
+})
 
-     var SelectedInput = $('input[name = "file"]:enabled');
+//提交按钮的事件
+$("#action").click(function () {
+        if ($("form").data("bootstrapValidator").validate().isValid()) {
+            var title = $('input[name = "title"]').val();
+            var summary = $('input[name = "summary"]').val();
 
-     var pic;
+            var SelectedInput = $('input[name = "file"]:enabled');
 
-     //依据上传方式不同决定图片的地址
-     if( SelectedInput.attr("type") == "text"){
-         pic = SelectedInput.val();
-     }else{
-         pic = $("#imgurl").attr("src");
-     }
-     var way = $('input[name ="picture"]:checked').val();
-     var content = $('#maincontent').val();
-     var price = $('input[name = "price"]').val();
+            var pic;
 
-     $.ajax({
-         url:"/editor/add",
-         type:"POST",
-         data:{
-             "title":title,
-             "summary":summary,
-              "pic":pic,
-             "way":way,
-             "content":content,
-             "price":price},
-         dataType:"json",
-         success:function (data) {
-             //成功的录入商品
-           if(data.code == 1){
-               $.confirm({
-                   title:"商品录入结果",
-                   content:"成功录入商品",
-                   buttons:{
-                       返回首页:function () {
-                           window.location.href = "/home";
-                       },
-                       继续编辑:function () {//在表单中设置一个清空的input，清空所有input
-                           $("input[type=reset]").trigger("click");
-                       }
-                   }
-               })
-           }
-         }
-     });
- })
+            //依据上传方式不同决定图片的地址
+            if (SelectedInput.attr("type") == "text") {
+                pic = SelectedInput.val();
+            } else {
+                pic = $("#imgurl").attr("src");
+            }
+            var way = $('input[name ="picture"]:checked').val();
+            var content = $('#maincontent').val();
+            var price = $('input[name = "price"]').val();
+            alert(pic);
+
+            $.ajax({
+                url: "/editor/add",
+                type: "POST",
+                data: {
+                    "id":id,
+                    "title": title,
+                    "summary": summary,
+                    "pic": pic,
+                    "way": way,
+                    "content": content,
+                    "price": price
+                },
+                dataType: "json",
+                success: function (data) {
+                    //成功的录入商品
+                    if (data.code == 1) {
+                        $.confirm({
+                            title: "商品录入结果",
+                            content: "成功录入商品",
+                            buttons: {
+                                返回首页: function () {
+                                    window.location.href = "/home";
+                                },
+                                继续编辑: function () {//在表单中设置一个清空的input，清空所有input
+                                    window.location.reload();//重新加载
+                                }
+                            }
+                        })
+                    }
+                }
+            })
+        }
+    });
 
  $(":radio").click(function () {
      var value= $('input[name="picture"]:checked').val();
@@ -160,6 +172,7 @@ $("#upload").click(function () {
         success:function (data) {
             if(data.code == 1){
                 $("#imgurl").attr("src",data["object"]);
+                $("input[type = 'file']").trigger("input");
             }else{
                 alert("上传失败");
             }
@@ -167,7 +180,9 @@ $("#upload").click(function () {
         }
     });
 
+
 })
+
 
 
 

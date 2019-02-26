@@ -16,8 +16,6 @@ public class Interceptor implements HandlerInterceptor{
         HttpSession session = request.getSession();
         if(session.getAttribute(MallConfig.USER_SESSION_KEY) != null)
             return  true;
-        if(session.getAttribute(MallConfig.SELLER_SESSION_KEY) != null)
-            return true;
         response.sendRedirect("/login");//直接返回登录页面
         return false;
     }

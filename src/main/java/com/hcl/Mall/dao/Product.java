@@ -33,7 +33,6 @@ public class Product {
 
     //正文内容
     @Lob
-    @Basic(fetch=FetchType.LAZY)
     private String content;
 
     //购买的时间

@@ -6,6 +6,7 @@ import com.hcl.Mall.query.ProductMessage;
 import com.hcl.Mall.service.*;
 import com.hcl.Mall.utls.JsonResult;
 import com.hcl.Mall.utls.MallConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/product")
 public class Commodity {
@@ -72,20 +74,12 @@ public class Commodity {
         return new JsonResult(0,"商品已购买",product);
     }
 
-    /**
-     * 返回商品编辑页面
-     * @return
-     */
-    @GetMapping("/editor")
-    public String editor(@RequestParam("id") long id,HttpSession session){
-        session.setAttribute(MallConfig.PRODUCT_SESSION_KEY,id);
-        return "Publish";
-    }
 
     @GetMapping("/delete")
     @ResponseBody
     public JsonResult deleteproduct(@RequestParam("id") long id){
-//        this.productRepositoryService.delete(id);
+        log.info("删除商品 ID为"+id);
+        this.productRepositoryService.delete(id);
         return new JsonResult(1,"成功删除该商品",null);
     }
 }

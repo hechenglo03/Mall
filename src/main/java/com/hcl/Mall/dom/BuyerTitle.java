@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserTitle {
+public class BuyerTitle {
 
     private String nickname;
 

@@ -104,7 +104,7 @@
 
                 <div class = "form-group noneborder">
                     <label class = "radio-inline col-sm-5 text-center">
-                        <input type="radio" name = "usertype" value = "user" checked>买家
+                        <input type="radio" name = "usertype" value = "buyer" checked>买家
                     </label>
                     <label class = "radio-inline col-sm-6 text-right">
                         <input type="radio" name = "usertype" value = "seller">卖家
@@ -126,10 +126,10 @@
 <script src = "/static/js/md5.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-    function Toast(text,head,fun) {
+    function Toast(text,icon,fun) {
         $.toast({
             text: text,
-            heading: head,
+            icon:icon,
             showHideTransition: 'fade',
             allowToastClose: true,
             hideAfter: 2000,
@@ -167,7 +167,8 @@
                     window.location.href = data['message'];
                 });
             }else{
-                Toast("登陆失败","error")
+                Toast("登陆失败","error");
+                $("input[type = 'password']").val("");//清空密码输入框
             }
 
         });

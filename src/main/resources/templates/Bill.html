@@ -49,7 +49,7 @@
             <div class = "col-md-12 title">
                 <h1 class="text-left text-info">我已购买的商品</h1>
             </div>
-            <div class = "col-md-12">
+            <div class = "col-md-12 pre-scrollable">
                 <div class ="Bill">
                     <table class = "table table-striped">
                         <tr >
@@ -81,6 +81,7 @@
 
     $.get("/balance/products",{index:index},function (data) {
         var list = data['object'];
+        console.log(list);
         for(var i = 0 ; i < list.length;i++){
             $(".table").append(
                 "<tr>"+

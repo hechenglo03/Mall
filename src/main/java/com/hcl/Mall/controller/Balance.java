@@ -1,7 +1,6 @@
 package com.hcl.Mall.controller;
 
 import com.hcl.Mall.dao.Product;
-import com.hcl.Mall.dao.User;
 import com.hcl.Mall.dom.AccountProduct;
 import com.hcl.Mall.query.ProductBillMessage;
 import com.hcl.Mall.query.ProductMessage;

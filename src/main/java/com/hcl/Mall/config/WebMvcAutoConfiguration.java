@@ -15,6 +15,10 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
     private Interceptor interceptor;
 
 
+    /**
+     * 设置拦截器
+     * @param registry
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(this.interceptor)
@@ -22,6 +26,16 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/product/editor")
                 .addPathPatterns("/product/deltete")
                 .addPathPatterns("/editor/**");
+    }
+
+    /**
+     * 设置静态文件路径
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry){
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
     }
 
 }
